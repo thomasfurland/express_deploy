@@ -1,0 +1,4 @@
+elixir 1.14.2-otp25
+erlang 25.1.2
+terraform 1.4.6
+ansible 6.7.0
