@@ -37,32 +37,12 @@ defmodule Phx.New.Project do
     Keyword.fetch!(binding, :ecto)
   end
 
-  def html?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :html)
-  end
-
-  def gettext?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :gettext)
-  end
-
-  def live?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :live)
-  end
-
-  def dashboard?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :dashboard)
-  end
-
   def javascript?(%Project{binding: binding}) do
     Keyword.fetch!(binding, :javascript)
   end
 
   def css?(%Project{binding: binding}) do
     Keyword.fetch!(binding, :css)
-  end
-
-  def mailer?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :mailer)
   end
 
   def verbose?(%Project{opts: opts}) do

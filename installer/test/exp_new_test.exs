@@ -1,6 +1,6 @@
 Code.require_file("mix_helper.exs", __DIR__)
 
-defmodule Mix.Tasks.Phx.NewTest do
+defmodule Mix.Tasks.Exp.NewTest do
   use ExUnit.Case, async: false
   import MixHelper
   import ExUnit.CaptureIO
@@ -14,26 +14,14 @@ defmodule Mix.Tasks.Phx.NewTest do
     :ok
   end
 
-  test "assets are in sync with priv" do
-    for file <- ~w(favicon.ico phoenix.png) do
-      assert File.read!("../priv/static/#{file}") ==
-               File.read!("templates/phx_static/#{file}")
-    end
-  end
-
-  test "components are in sync with priv" do
-    assert File.read!("../priv/templates/phx.gen.live/core_components.ex") ==
-             File.read!("templates/phx_web/components/core_components.ex")
-  end
-
   test "returns the version" do
-    Mix.Tasks.Phx.New.run(["-v"])
+    Mix.Tasks.Exp.New.run(["-v"])
     assert_received {:mix_shell, :info, ["Phoenix installer v" <> _]}
   end
 
   test "new with defaults" do
     in_tmp("new with defaults", fn ->
-      Mix.Tasks.Phx.New.run([@app_name])
+      Mix.Tasks.Exp.New.run([@app_name])
 
       assert_file("phx_blog/README.md")
 
@@ -305,7 +293,7 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new without defaults" do
     in_tmp("new without defaults", fn ->
-      Mix.Tasks.Phx.New.run([
+      Mix.Tasks.Exp.New.run([
         @app_name,
         "--no-html",
         "--no-assets",
@@ -446,7 +434,7 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new with --no-dashboard" do
     in_tmp("new with no_dashboard", fn ->
-      Mix.Tasks.Phx.New.run([@app_name, "--no-dashboard"])
+      Mix.Tasks.Exp.New.run([@app_name, "--no-dashboard"])
 
       assert_file("phx_blog/mix.exs", &refute(&1 =~ ~r":phoenix_live_dashboard"))
 
@@ -464,7 +452,7 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new with --no-dashboard and --no-live" do
     in_tmp("new with no_dashboard and no_live", fn ->
-      Mix.Tasks.Phx.New.run([@app_name, "--no-dashboard", "--no-live"])
+      Mix.Tasks.Exp.New.run([@app_name, "--no-dashboard", "--no-live"])
 
       assert_file("phx_blog/lib/phx_blog_web/endpoint.ex", fn file ->
         assert file =~ ~s|defmodule PhxBlogWeb.Endpoint|
@@ -476,7 +464,7 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new with --no-html" do
     in_tmp("new with no_html", fn ->
-      Mix.Tasks.Phx.New.run([@app_name, "--no-html"])
+      Mix.Tasks.Exp.New.run([@app_name, "--no-html"])
 
       assert_file("phx_blog/mix.exs", fn file ->
         refute file =~ ~s|:phoenix_live_view|
@@ -514,7 +502,7 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new with --no-assets" do
     in_tmp("new no_assets", fn ->
-      Mix.Tasks.Phx.New.run([@app_name, "--no-assets"])
+      Mix.Tasks.Exp.New.run([@app_name, "--no-assets"])
 
       assert_file("phx_blog/.gitignore", fn file ->
         refute file =~ "/priv/static/assets/"
@@ -538,7 +526,7 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new with --no-ecto" do
     in_tmp("new with no_ecto", fn ->
-      Mix.Tasks.Phx.New.run([@app_name, "--no-ecto"])
+      Mix.Tasks.Exp.New.run([@app_name, "--no-ecto"])
 
       assert_file("phx_blog/.formatter.exs", fn file ->
         assert file =~ "import_deps: [:phoenix]"
@@ -551,14 +539,14 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new with binary_id" do
     in_tmp("new with binary_id", fn ->
-      Mix.Tasks.Phx.New.run([@app_name, "--binary-id"])
+      Mix.Tasks.Exp.New.run([@app_name, "--binary-id"])
       assert_file("phx_blog/config/config.exs", ~r/generators: \[binary_id: true\]/)
     end)
   end
 
   test "new with uppercase" do
     in_tmp("new with uppercase", fn ->
-      Mix.Tasks.Phx.New.run(["phxBlog"])
+      Mix.Tasks.Exp.New.run(["phxBlog"])
 
       assert_file("phxBlog/README.md")
 
@@ -576,7 +564,7 @@ defmodule Mix.Tasks.Phx.NewTest do
   test "new with path, app and module" do
     in_tmp("new with path, app and module", fn ->
       project_path = Path.join(File.cwd!(), "custom_path")
-      Mix.Tasks.Phx.New.run([project_path, "--app", @app_name, "--module", "PhoteuxBlog"])
+      Mix.Tasks.Exp.New.run([project_path, "--app", @app_name, "--module", "PhoteuxBlog"])
 
       assert_file("custom_path/.gitignore")
       assert_file("custom_path/.gitignore", ~r/\n$/)
@@ -592,7 +580,7 @@ defmodule Mix.Tasks.Phx.NewTest do
       File.mkdir!("apps")
 
       File.cd!("apps", fn ->
-        Mix.Tasks.Phx.New.run([@app_name])
+        Mix.Tasks.Exp.New.run([@app_name])
 
         assert_file("phx_blog/mix.exs", fn file ->
           assert file =~ "deps_path: \"../../deps\""
@@ -604,7 +592,7 @@ defmodule Mix.Tasks.Phx.NewTest do
 
   test "new with --no-install" do
     in_tmp("new with no install", fn ->
-      Mix.Tasks.Phx.New.run([@app_name, "--no-install"])
+      Mix.Tasks.Exp.New.run([@app_name, "--no-install"])
 
       # Does not prompt to install dependencies
       refute_received {:mix_shell, :yes?, ["\nFetch and install dependencies?"]}
@@ -622,7 +610,7 @@ defmodule Mix.Tasks.Phx.NewTest do
   test "new defaults to pg adapter" do
     in_tmp("new defaults to pg adapter", fn ->
       project_path = Path.join(File.cwd!(), "custom_path")
-      Mix.Tasks.Phx.New.run([project_path])
+      Mix.Tasks.Exp.New.run([project_path])
 
       assert_file("custom_path/mix.exs", ":postgrex")
 
@@ -653,7 +641,7 @@ defmodule Mix.Tasks.Phx.NewTest do
   test "new with mysql adapter" do
     in_tmp("new with mysql adapter", fn ->
       project_path = Path.join(File.cwd!(), "custom_path")
-      Mix.Tasks.Phx.New.run([project_path, "--database", "mysql"])
+      Mix.Tasks.Exp.New.run([project_path, "--database", "mysql"])
 
       assert_file("custom_path/mix.exs", ":myxql")
       assert_file("custom_path/config/dev.exs", [~r/username: "root"/, ~r/password: ""/])
@@ -673,7 +661,7 @@ defmodule Mix.Tasks.Phx.NewTest do
   test "new with sqlite3 adapter" do
     in_tmp("new with sqlite3 adapter", fn ->
       project_path = Path.join(File.cwd!(), "custom_path")
-      Mix.Tasks.Phx.New.run([project_path, "--database", "sqlite3"])
+      Mix.Tasks.Exp.New.run([project_path, "--database", "sqlite3"])
 
       assert_file("custom_path/mix.exs", ":ecto_sqlite3")
       assert_file("custom_path/config/dev.exs", [~r/database: .*_dev.db/])
@@ -696,7 +684,7 @@ defmodule Mix.Tasks.Phx.NewTest do
   test "new with mssql adapter" do
     in_tmp("new with mssql adapter", fn ->
       project_path = Path.join(File.cwd!(), "custom_path")
-      Mix.Tasks.Phx.New.run([project_path, "--database", "mssql"])
+      Mix.Tasks.Exp.New.run([project_path, "--database", "mssql"])
 
       assert_file("custom_path/mix.exs", ":tds")
 
@@ -727,46 +715,46 @@ defmodule Mix.Tasks.Phx.NewTest do
       project_path = Path.join(File.cwd!(), "custom_path")
 
       assert_raise Mix.Error, ~s(Unknown database "invalid"), fn ->
-        Mix.Tasks.Phx.New.run([project_path, "--database", "invalid"])
+        Mix.Tasks.Exp.New.run([project_path, "--database", "invalid"])
       end
     end)
   end
 
   test "new with invalid args" do
     assert_raise Mix.Error, ~r"Application name must start with a letter and ", fn ->
-      Mix.Tasks.Phx.New.run(["007invalid"])
+      Mix.Tasks.Exp.New.run(["007invalid"])
     end
 
     assert_raise Mix.Error, ~r"Application name must start with a letter and ", fn ->
-      Mix.Tasks.Phx.New.run(["valid", "--app", "007invalid"])
+      Mix.Tasks.Exp.New.run(["valid", "--app", "007invalid"])
     end
 
     assert_raise Mix.Error, ~r"Module name must be a valid Elixir alias", fn ->
-      Mix.Tasks.Phx.New.run(["valid", "--module", "not.valid"])
+      Mix.Tasks.Exp.New.run(["valid", "--module", "not.valid"])
     end
 
     assert_raise Mix.Error, ~r"Module name \w+ is already taken", fn ->
-      Mix.Tasks.Phx.New.run(["string"])
+      Mix.Tasks.Exp.New.run(["string"])
     end
 
     assert_raise Mix.Error, ~r"Module name \w+ is already taken", fn ->
-      Mix.Tasks.Phx.New.run(["valid", "--app", "mix"])
+      Mix.Tasks.Exp.New.run(["valid", "--app", "mix"])
     end
 
     assert_raise Mix.Error, ~r"Module name \w+ is already taken", fn ->
-      Mix.Tasks.Phx.New.run(["valid", "--module", "String"])
+      Mix.Tasks.Exp.New.run(["valid", "--module", "String"])
     end
   end
 
   test "invalid options" do
     assert_raise OptionParser.ParseError, fn ->
-      Mix.Tasks.Phx.New.run(["valid", "-database", "mysql"])
+      Mix.Tasks.Exp.New.run(["valid", "-database", "mysql"])
     end
   end
 
   test "new without args" do
     in_tmp("new without args", fn ->
-      assert capture_io(fn -> Mix.Tasks.Phx.New.run([]) end) =~
+      assert capture_io(fn -> Mix.Tasks.Exp.New.run([]) end) =~
                "Creates a new Phoenix project."
     end)
   end

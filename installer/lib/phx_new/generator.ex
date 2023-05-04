@@ -155,17 +155,6 @@ defmodule Phx.New.Generator do
     File.write!(file, [formatted, ?\n])
   end
 
-  def inject_umbrella_config_defaults(project) do
-    unless File.exists?(Project.join_path(project, :project, "config/dev.exs")) do
-      path = Project.join_path(project, :project, "config/config.exs")
-
-      extra =
-        Phx.New.Umbrella.render(:new, "phx_umbrella/config/extra_config.exs", project.binding)
-
-      File.write(path, [File.read!(path), extra])
-    end
-  end
-
   defp split_with_self(contents, text) do
     case :binary.split(contents, text) do
       [left, right] -> [left, text, right]
@@ -184,14 +173,6 @@ defmodule Phx.New.Generator do
   def put_binding(%Project{opts: opts} = project) do
     db = Keyword.get(opts, :database, "postgres")
     ecto = Keyword.get(opts, :ecto, true)
-    html = Keyword.get(opts, :html, true)
-    live = html && Keyword.get(opts, :live, true)
-    dashboard = Keyword.get(opts, :dashboard, true)
-    gettext = Keyword.get(opts, :gettext, true)
-    assets = Keyword.get(opts, :assets, true)
-    esbuild = Keyword.get(opts, :esbuild, assets)
-    tailwind = Keyword.get(opts, :tailwind, assets)
-    mailer = Keyword.get(opts, :mailer, true)
     dev = Keyword.get(opts, :dev, false)
     phoenix_path = phoenix_path(project, dev, false)
     phoenix_path_umbrella_root = phoenix_path(project, dev, true)
@@ -232,16 +213,9 @@ defmodule Phx.New.Generator do
       signing_salt: random_string(8),
       lv_signing_salt: random_string(8),
       in_umbrella: project.in_umbrella?,
-      asset_builders: Enum.filter([tailwind && :tailwind, esbuild && :esbuild], & &1),
-      javascript: esbuild,
-      css: tailwind,
-      mailer: mailer,
+      asset_builders: [:tailwind, :esbuild],
       ecto: ecto,
-      html: html,
-      live: live,
-      live_comment: if(live, do: nil, else: "// "),
-      dashboard: dashboard,
-      gettext: gettext,
+      live_comment: nil,
       adapter_app: adapter_app,
       adapter_module: adapter_module,
       adapter_config: adapter_config,

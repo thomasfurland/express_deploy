@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Local.Phx do
+defmodule Mix.Tasks.Local.Exp do
   use Mix.Task
 
   @shortdoc "Updates the Phoenix project generator locally"
@@ -13,6 +13,6 @@ defmodule Mix.Tasks.Local.Phx do
 
   @impl true
   def run(args) do
-    Mix.Task.run("archive.install", ["hex", "phx_new" | args])
+    Mix.Task.run("archive.install", ["hex", "exp_new" | args])
   end
 end

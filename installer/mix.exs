@@ -3,11 +3,10 @@ for path <- :code.get_path(),
   Code.delete_path(path)
 end
 
-defmodule Phx.New.MixProject do
+defmodule Exp.New.MixProject do
   use Mix.Project
 
-  @version "1.7.2"
-  @scm_url "https://github.com/phoenixframework/phoenix"
+  @version "0.0.1"
 
   # If the elixir requirement is updated, we need to update:
   #
@@ -26,26 +25,13 @@ defmodule Phx.New.MixProject do
       version: @version,
       elixir: @elixir_requirement,
       deps: deps(),
-      package: [
-        maintainers: [
-          "Chris McCord",
-          "José Valim",
-          "Gary Rennie",
-          "Jason Stiebs"
-        ],
-        licenses: ["MIT"],
-        links: %{"GitHub" => @scm_url},
-        files: ~w(lib templates mix.exs README.md)
-      ],
+      package: [],
       preferred_cli_env: [docs: :docs],
-      source_url: @scm_url,
-      docs: docs(),
-      homepage_url: "https://www.phoenixframework.org",
       description: """
-      Phoenix framework project generator.
+      Express Deploy and Phoenix framework project generator.
 
-      Provides a `mix phx.new` task to bootstrap a new Elixir application
-      with Phoenix dependencies.
+      Provides a `mix exp.new` task to bootstrap a new Elixir application
+      with Express Deploy and Phoenix dependencies.
       """
     ]
   end
@@ -59,12 +45,6 @@ defmodule Phx.New.MixProject do
   def deps do
     [
       {:ex_doc, "~> 0.24", only: :docs}
-    ]
-  end
-
-  defp docs do
-    [
-      source_url_pattern: "#{@scm_url}/blob/v#{@version}/installer/%{path}#L%{line}"
     ]
   end
 end
