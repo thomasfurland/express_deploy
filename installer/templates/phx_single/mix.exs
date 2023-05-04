@@ -39,19 +39,18 @@ defmodule <%= @app_module %>.MixProject do
       <%= @phoenix_dep %>,<%= if @ecto do %>
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
-      {<%= inspect @adapter_app %>, ">= 0.0.0"},<% end %><%= if @html do %>
+      {<%= inspect @adapter_app %>, ">= 0.0.0"},<% end %>
       {:phoenix_html, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18.16"},
-      {:floki, ">= 0.30.0", only: :test},<% end %><%= if @dashboard do %>
-      {:phoenix_live_dashboard, "~> 0.7.2"},<% end %><%= if @javascript do %>
-      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},<% end %><%= if @css do %>
-      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},<% end %><%= if @mailer do %>
+      {:floki, ">= 0.30.0", only: :test},
+      {:phoenix_live_dashboard, "~> 0.7.2"},
+      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
-      {:finch, "~> 0.13"},<% end %>
+      {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"},<%= if @gettext do %>
-      {:gettext, "~> 0.20"},<% end %>
+      {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"}
     ]
@@ -65,13 +64,13 @@ defmodule <%= @app_module %>.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"<%= if @ecto do %>, "ecto.setup"<% end %><%= if @asset_builders != [] do %>, "assets.setup", "assets.build"<% end %>]<%= if @ecto do %>,
+      setup: ["deps.get"<%= if @ecto do %>, "ecto.setup"<% end %>, "assets.setup", "assets.build"]<%= if @ecto do %>,
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]<% end %><%= if @asset_builders != [] do %>,
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]<% end %>,
       "assets.setup": <%= inspect Enum.map(@asset_builders, &"#{&1}.install --if-missing") %>,
       "assets.build": <%= inspect Enum.map(@asset_builders, &"#{&1} default") %>,
-      "assets.deploy": <%= inspect Enum.map(@asset_builders, &"#{&1} default --minify") ++ ["phx.digest"] %><% end %>
+      "assets.deploy": <%= inspect Enum.map(@asset_builders, &"#{&1} default --minify") ++ ["phx.digest"] %>
     ]
   end
 end

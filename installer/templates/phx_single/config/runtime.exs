@@ -78,7 +78,7 @@ if config_env() == :prod do
   #     config :<%= @web_app_name %>, <%= @endpoint_module %>,
   #       force_ssl: [hsts: true]
   #
-  # Check `Plug.SSL` for all available options in `force_ssl`.<%= if @mailer do %>
+  # Check `Plug.SSL` for all available options in `force_ssl`.
 
   # ## Configuring the mailer
   #
@@ -96,5 +96,5 @@ if config_env() == :prod do
   #
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
-  # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.<% end %>
+  # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end

@@ -11,7 +11,7 @@ defmodule <%= @endpoint_module %> do
     same_site: "Lax"
   ]
 
-  <%= if !(@dashboard || @live) do %><%= "# " %><% end %>socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -25,16 +25,16 @@ defmodule <%= @endpoint_module %> do
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
-  if code_reloading? do<%= if @html do %>
+  if code_reloading? do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
-    plug Phoenix.LiveReloader<% end %>
+    plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader<%= if @ecto do %>
     plug Phoenix.Ecto.CheckRepoStatus, otp_app: :<%= @web_app_name %><% end %>
-  end<%= if @dashboard do %>
+  end
 
   plug Phoenix.LiveDashboard.RequestLogger,
     param_key: "request_logger",
-    cookie_key: "request_logger"<% end %>
+    cookie_key: "request_logger"
 
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]

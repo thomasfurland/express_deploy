@@ -30,13 +30,6 @@ defmodule Phx.New.Single do
      "phx_test/controllers": "test/:lib_web_name/controllers"}
   ])
 
-  template(:gettext, [
-    {:eex, :project,
-     "phx_gettext/gettext.ex": "lib/:lib_web_name/gettext.ex",
-     "phx_gettext/en/LC_MESSAGES/errors.po": "priv/gettext/en/LC_MESSAGES/errors.po",
-     "phx_gettext/errors.pot": "priv/gettext/errors.pot"}
-  ])
-
   template(:html, [
     {:eex, :project,
      "phx_web/controllers/error_html.ex": "lib/:lib_web_name/controllers/error_html.ex",
@@ -79,16 +72,6 @@ defmodule Phx.New.Single do
   template(:js, [
     {:eex, :web,
      "phx_assets/app.js": "assets/js/app.js", "phx_assets/topbar.js": "assets/vendor/topbar.js"}
-  ])
-
-  template(:no_js, [
-    {:text, :web, "phx_static/app.js": "priv/static/assets/app.js"}
-  ])
-
-  template(:no_css, [
-    {:text, :web,
-     "phx_static/app.css": "priv/static/assets/app.css",
-     "phx_static/home.css": "priv/static/assets/home.css"}
   ])
 
   template(:static, [
@@ -134,9 +117,9 @@ defmodule Phx.New.Single do
     copy_from(project, __MODULE__, :new)
 
     if Project.ecto?(project), do: gen_ecto(project)
-    if Project.html?(project), do: gen_html(project)
-    if Project.mailer?(project), do: gen_mailer(project)
-    if Project.gettext?(project), do: gen_gettext(project)
+    gen_html(project)
+    gen_mailer(project)
+    #gen_gettext(project)
 
     gen_assets(project)
     project
@@ -156,21 +139,9 @@ defmodule Phx.New.Single do
   end
 
   def gen_assets(%Project{} = project) do
-    javascript? = Project.javascript?(project)
-    css? = Project.css?(project)
-    html? = Project.html?(project)
-
     copy_from(project, __MODULE__, :static)
-
-    if html? or javascript? do
-      command = if javascript?, do: :js, else: :no_js
-      copy_from(project, __MODULE__, command)
-    end
-
-    if html? or css? do
-      command = if css?, do: :css, else: :no_css
-      copy_from(project, __MODULE__, command)
-    end
+    copy_from(project, __MODULE__, :js)
+    copy_from(project, __MODULE__, :css)
   end
 
   def gen_mailer(%Project{} = project) do

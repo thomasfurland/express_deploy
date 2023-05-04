@@ -37,14 +37,6 @@ defmodule Phx.New.Project do
     Keyword.fetch!(binding, :ecto)
   end
 
-  def javascript?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :javascript)
-  end
-
-  def css?(%Project{binding: binding}) do
-    Keyword.fetch!(binding, :css)
-  end
-
   def verbose?(%Project{opts: opts}) do
     Keyword.get(opts, :verbose, false)
   end

@@ -25,8 +25,8 @@ defmodule <%= @web_namespace %> do
 
       # Import common connection and controller functions to use in pipelines
       import Plug.Conn
-      import Phoenix.Controller<%= if @html do %>
-      import Phoenix.LiveView.Router<% end %>
+      import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 
@@ -42,12 +42,11 @@ defmodule <%= @web_namespace %> do
         formats: [:html, :json],
         layouts: [html: <%= @web_namespace %>.Layouts]
 
-      import Plug.Conn<%= if @gettext do %>
-      import <%= @web_namespace %>.Gettext<% end %>
+      import Plug.Conn
 
       unquote(verified_routes())
     end
-  end<%= if @html do %>
+  end
 
   def live_view do
     quote do
@@ -84,8 +83,7 @@ defmodule <%= @web_namespace %> do
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components and translation
-      import <%= @web_namespace %>.CoreComponents<%= if @gettext do %>
-      import <%= @web_namespace %>.Gettext<% end %>
+      import <%= @web_namespace %>.CoreComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
@@ -93,7 +91,7 @@ defmodule <%= @web_namespace %> do
       # Routes generation with the ~p sigil
       unquote(verified_routes())
     end
-  end<% end %>
+  end
 
   def verified_routes do
     quote do

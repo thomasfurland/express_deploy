@@ -5,14 +5,14 @@ import Config
 config :<%= @app_name %>, <%= @endpoint_module %>,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "<%= @secret_key_base_test %>",
-  server: false<%= if @mailer do %>
+  server: false
 
 # In test we don't send emails.
 config :<%= @app_name %>, <%= @app_module %>.Mailer,
   adapter: Swoosh.Adapters.Test
 
 # Disable swoosh api client as it is only required for production adapters.
-config :swoosh, :api_client, false<% end %>
+config :swoosh, :api_client, false
 
 # Print only warnings and errors during test
 config :logger, level: :warning
