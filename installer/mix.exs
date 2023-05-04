@@ -20,7 +20,7 @@ defmodule Exp.New.MixProject do
 
   def project do
     [
-      app: :phx_new,
+      app: :exp_new,
       start_permanent: Mix.env() == :prod,
       version: @version,
       elixir: @elixir_requirement,
