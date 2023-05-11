@@ -3,12 +3,12 @@ defmodule Relay do
   Documentation for `Relay`.
   """
   
-  defstruct [in: [], out: [], status: :ok]
+  defstruct [common_opts: [], in: [], out: [], status: :ok]
 
-  @opts [:binary, :use_stdio, :stderr_to_stdout]
+  @opts [:binary, :use_stdio, :stderr_to_stdout, :exit_status]
 
-  def new(_opts \\ []) do
-    %__MODULE__{}
+  def new(opts \\ []) do
+    %__MODULE__{common_opts: opts}
   end
   
   def cmd(state, cmd, args, opts \\ [], check_fnc \\ &default/1)
@@ -17,17 +17,23 @@ defmodule Relay do
   def cmd(%__MODULE__{} = state, cmd, args, opts, check_fnc) do
     with opts <- get_valid_opts(opts, [{:args, args} | @opts]),
          path when is_binary(path) <- System.find_executable(cmd),
-         port when is_port(port) <- Port.open({:spawn_executable, path}, opts)
+         port when is_port(port) <- Port.open({:spawn_executable, path}, opts),
+         data = collect_responses(port)
     do
-      receive do
-        {^port, {:exit_status, code}} -> update(state, :error, {cmd, args}, "Exit code: #{code}")
-        {^port, {:data, data}} -> 
-          data
-          |> check_fnc.()
-          |> then(&update(state, &1, {cmd, args}, data))
-      end
+      data
+      |> check_fnc.()
+      |> then(&if  &1, do: :ok, else: :error)
+      |> then(&update(state, %{status: &1, in: {cmd, args}, out: data}))
     else
-      nil -> update(state, :error, {cmd, args}, :enoent)
+      nil -> update(state, %{status: :error, in: {cmd, args}, out: :enoent})
+    end
+  end
+
+  defp collect_responses(port, collected \\ []) do
+    receive do
+      {^port, {:exit_status, 0}} -> collected
+      {^port, {:exit_status, code}} -> ["Exit code: #{code}" | collected]
+      {^port, {:data, data}} -> collect_responses(port, [data | collected])
     end
   end
 
@@ -37,13 +43,17 @@ defmodule Relay do
     end)
   end
 
-  defp update(%__MODULE__{in: inp, out: out}, status, new_inp, new_out) do
-    %__MODULE__{
+  defp update(%__MODULE__{in: inp, out: out} = state, %{
+    status: status,
+    in: new_inp,
+    out: new_out
+  }) do
+    %__MODULE__{state |
       status: status,
       in: [new_inp | inp],
       out: [new_out | out]
     }
   end
 
-  defp default(_), do: :ok
+  defp default(_), do: true
 end
