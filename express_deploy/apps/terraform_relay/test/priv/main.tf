@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "google" {
-  credentials = "./the-pulsar-385005-c985324f7a08.json"
+  credentials = ""
 
-  project = "the-pulsar-385005"
+  project = ""
   region  = "asia-northeast1"
   zone    = "asia-northeast1-a"
 }
