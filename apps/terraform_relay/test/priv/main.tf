@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = ""
+  credentials = "cant see me right?"
 
   project = ""
   region  = "asia-northeast1"

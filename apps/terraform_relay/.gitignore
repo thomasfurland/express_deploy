@@ -24,3 +24,5 @@ terraform_relay-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+*/priv/
