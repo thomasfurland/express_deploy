@@ -1,4 +1,4 @@
-defmodule TerraformRelay.Helper do
+defmodule Relay.Helper do
   def parse_output(%Relay{out: [output | rest]} = relay) when is_list(output) do
     output
     |> Enum.flat_map(&parse_json/1)

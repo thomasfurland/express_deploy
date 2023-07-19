@@ -3,8 +3,6 @@ defmodule TerraformRelay do
   Documentation for `TerraformRelay`.
   """
   
-  alias TerraformRelay.Helper
-
   @default_opts [
     path: "/resources/terraform/", 
     output: "-json",
@@ -18,7 +16,7 @@ defmodule TerraformRelay do
 
     relay
     |> Relay.cmd("terraform", args, [], &string_in_data(&1, ok_msg))
-    |> Helper.parse_output()
+    |> Relay.output()
   end
 
   def fmt(%Relay{common_opts: c_opts} = relay \\ Relay.new(), opts \\ []) do
@@ -28,7 +26,7 @@ defmodule TerraformRelay do
 
     relay
     |> Relay.cmd("terraform", args, [], & not string_in_data(&1, err_msg))
-    |> Helper.parse_output()
+    |> Relay.output()
   end
   
   def validate(%Relay{common_opts: c_opts} = relay \\ Relay.new(), opts \\ []) do
@@ -45,7 +43,7 @@ defmodule TerraformRelay do
     relay
     |> Relay.cmd("terraform", args, [], &string_in_data(&1, ok_msg))
     |> IO.inspect()
-    |> Helper.parse_output()
+    |> Relay.output()
   end
   
   def plan(%Relay{common_opts: c_opts} = relay \\ Relay.new(), opts \\ []) do
@@ -61,7 +59,7 @@ defmodule TerraformRelay do
 
     relay
     |> Relay.cmd("terraform", args, [], & not string_in_data(&1, err_msg))
-    |> Helper.parse_output()
+    |> Relay.output()
   end
   
   def show(%Relay{common_opts: c_opts} = relay \\ Relay.new(), opts \\ []) do
@@ -76,7 +74,7 @@ defmodule TerraformRelay do
 
     relay
     |> Relay.cmd("terraform", args)
-    |> Helper.parse_output()
+    |> Relay.output()
   end
   
   def apply(%Relay{common_opts: c_opts} = relay \\ Relay.new(), opts \\ []) do
@@ -93,7 +91,7 @@ defmodule TerraformRelay do
 
     relay
     |> Relay.cmd("terraform", args, [], & not string_in_data(&1, err_msg))
-    |> Helper.parse_output()
+    |> Relay.output()
   end
   
   def destroy(%Relay{common_opts: c_opts} = relay \\ Relay.new(), opts \\ []) do
@@ -110,7 +108,7 @@ defmodule TerraformRelay do
 
     relay
     |> Relay.cmd("terraform", args, [], & not string_in_data(&1, err_msg))
-    |> Helper.parse_output()
+    |> Relay.output()
   end
 
   defp merge_opts(opts), do: 

@@ -29,8 +29,7 @@ defmodule TerraformRelay.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:relay, in_umbrella: true},
-      {:jason, "~> 1.4"}
+      {:relay, in_umbrella: true}
     ]
   end
 end

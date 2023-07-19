@@ -10,6 +10,8 @@ defmodule Relay do
   def new(opts \\ []) do
     %__MODULE__{common_opts: opts}
   end
+
+  def output(state), do: __MODULE__.Helper.parse_output(state)
   
   def cmd(state, cmd, args, opts \\ [], check_fnc \\ &default/1)
 
