@@ -1,4 +1,4 @@
-defmodule ExpressDeploy.MixProject do
+defmodule ExpressDeployProject.MixProject do
   use Mix.Project
 
   def project do
