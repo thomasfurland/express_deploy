@@ -19,8 +19,6 @@ defmodule ExpressDeployTest do
       assert contents =~ "fizz: buzz"
       assert contents =~ "foo: bar"
       assert contents =~ "credential_file: #{@path}/resource_dir/credential_file.json"
-
-      IO.inspect(contents)
     end
   end
 end

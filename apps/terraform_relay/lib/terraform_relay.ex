@@ -11,7 +11,7 @@ defmodule TerraformRelay do
 
   def init(%Relay{common_opts: c_opts} = relay \\ Relay.new(), opts \\ []) do
     ok_msg = "Terraform has been successfully initialized!"
-    opts = merge_opts([c_opts, opts]) |> IO.inspect()
+    opts = merge_opts([c_opts, opts])
     args = valid_global_args(opts) ++ ["init"]
 
     relay
@@ -42,7 +42,6 @@ defmodule TerraformRelay do
 
     relay
     |> Relay.cmd("terraform", args, [], &string_in_data(&1, ok_msg))
-    |> IO.inspect()
     |> Relay.output()
   end
   
