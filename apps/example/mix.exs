@@ -6,7 +6,7 @@ defmodule Example.MixProject do
       app: :example,
       version: "0.1.0",
       build_path: "../../_build",
-      config_path: "../../config/config.exs",
+      config_path: "./config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.14",
@@ -53,7 +53,8 @@ defmodule Example.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:hackney, "~> 1.9"}
     ]
   end
 
