@@ -3,6 +3,8 @@ defmodule ExpressDeploy do
   Documentation for `ExpressDeploy`.
   """
 
+  require EEx
+
   @resource_directory ""
   @temp_directory ""
 
@@ -12,29 +14,31 @@ defmodule ExpressDeploy do
     temp_directory = params[:temp_directory] || @temp_directory
 
     File.rm_rf(temp_directory)
+    File.mkdir(temp_directory)
+    
+    with {:ok, files} <- File.ls(resource_directory) do
+      for file <- files do
+        destination = 
+          file
+          |> String.replace_trailing(".eex", "")
+          |> Path.expand(temp_directory)
 
-    for file <- File.ls(resource_directory) do
-      destination = 
         file
-        |> String.replace_trailing(".eex", "")
-        |> Path.expand(temp_directory)
+        |> Path.expand(resource_directory)
+        |> EEx.eval_file(assigns: params)
+        |> then(&File.write(destination, &1))
+      end
 
-      file
-      |> Path.expand(resource_directory)
-      |> EEx.eval_file(assigns: params)
-      |> IO.inspect()
-      |> then(&File.write(destination, &1))
+      fnc.(temp_directory)
     end
-
-    fnc.(temp_directory)
   end
 
   defp process_config(config) do
     Enum.reduce(config, [], fn 
       {:credential_file, file}, acc -> Keyword.update(acc, :credential_file, file, & "#{&1}/#{file}")
-      {:resource_dir, directory}, acc -> 
+      {:resource_directory, directory}, acc -> 
         acc
-        |> Keyword.put(:resource_dir, directory)
+        |> Keyword.put(:resource_directory, directory)
         |> Keyword.update(:credential_file, directory, & "#{directory}/#{&1}")
       {key, value}, acc -> Keyword.put(acc, key, value)
     end)
