@@ -1,19 +1,16 @@
 defmodule Relay.Helper do
   def parse_output(%Relay{out: [output | rest]} = relay) when is_list(output) do
     output
-    |> Enum.flat_map(&parse_json/1)
+    |> Enum.map(&parse_json/1)
     |> Enum.reject(& &1 === "")
     |> Enum.reverse()
     |> then(& %Relay{relay | out: [&1 | rest]})
   end
 
   def parse_output(%Relay{out: [output | rest]} = relay) do
-    with {:error, _} <- Jason.decode(output),
-         {:ok, json} <- decode_json_lines(output)
-    do
+    with json when is_map(json) <- parse_json(output) do
       %Relay{relay | out: [json | rest]}
     else
-      {:ok, json} -> %Relay{relay | out: [json | rest]}
       {:error, _} -> relay
     end
   end
@@ -29,7 +26,7 @@ defmodule Relay.Helper do
     end
   end
   
-  def decode_json_lines(string) do
+  defp decode_json_lines(string) do
     string
     |> String.split("\n")
     |> Enum.map(&Jason.decode/1)

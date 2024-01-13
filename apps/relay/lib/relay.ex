@@ -11,7 +11,7 @@ defmodule Relay do
     %__MODULE__{common_opts: opts}
   end
 
-  def output(state), do: __MODULE__.Helper.parse_output(state)
+  def output(%__MODULE__{} = state), do: __MODULE__.Helper.parse_output(state)
   
   def cmd(state, cmd, args, opts \\ [], check_fnc \\ &default/1)
 
@@ -24,7 +24,6 @@ defmodule Relay do
     do
       data
       |> check_fnc.()
-      |> then(&if  &1, do: :ok, else: :error)
       |> then(&update(state, %{status: &1, in: {cmd, args}, out: data}))
     else
       nil -> update(state, %{status: :error, in: {cmd, args}, out: :enoent})
@@ -57,5 +56,5 @@ defmodule Relay do
     }
   end
 
-  defp default(_), do: true
+  defp default(_), do: :ok
 end
