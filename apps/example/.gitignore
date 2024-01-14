@@ -35,3 +35,6 @@ example-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# hides credentials for gcp. This file is a standard service account key.
+/priv/resources/gcp/credentials.json
+
