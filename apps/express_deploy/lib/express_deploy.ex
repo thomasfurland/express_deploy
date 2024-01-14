@@ -8,13 +8,14 @@ defmodule ExpressDeploy do
   @resource_directory ""
   @temp_directory ""
 
-  def run(config, fnc) do
-    params = process_config(config)
-    resource_directory = params[:resource_directory] || @resource_directory
-    temp_directory = params[:temp_directory] || @temp_directory
-
-    File.rm_rf(temp_directory)
-    File.mkdir(temp_directory)
+  def run(config, opts \\ [], fnc) do
+    resource_directory = config[:resource_directory] || @resource_directory
+    temp_directory = config[:temp_directory] || @temp_directory
+    
+    if Keyword.get(opts, :recreate_temp, true) do
+      File.rm_rf(temp_directory)
+      File.mkdir(temp_directory)
+    end
     
     with {:ok, files} <- File.ls(resource_directory) do
       for file <- files do
@@ -25,22 +26,11 @@ defmodule ExpressDeploy do
 
         file
         |> Path.expand(resource_directory)
-        |> EEx.eval_file(assigns: params)
+        |> EEx.eval_file(assigns: config)
         |> then(&File.write(destination, &1))
       end
 
       fnc.(temp_directory)
     end
-  end
-
-  defp process_config(config) do
-    Enum.reduce(config, [], fn 
-      {:credential_file, file}, acc -> Keyword.update(acc, :credential_file, file, & "#{&1}/#{file}")
-      {:resource_directory, directory}, acc -> 
-        acc
-        |> Keyword.put(:resource_directory, directory)
-        |> Keyword.update(:credential_file, directory, & "#{directory}/#{&1}")
-      {key, value}, acc -> Keyword.put(acc, key, value)
-    end)
   end
 end

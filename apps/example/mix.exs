@@ -54,7 +54,11 @@ defmodule Example.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:hackney, "~> 1.9"}
+      {:hackney, "~> 1.9"},
+
+      {:express_deploy, in_umbrella: true},
+      {:ansible_relay, in_umbrella: true},
+      {:terraform_relay, in_umbrella: true}
     ]
   end
 

@@ -25,7 +25,7 @@ defmodule AnsibleRelay.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:relay, in_umbrella: true}
+      {:express_deploy, in_umbrella: true}
     ]
   end
 end

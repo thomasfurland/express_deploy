@@ -8,7 +8,8 @@
 import Config
 
 config :example,
-  ecto_repos: [Example.Repo]
+  ecto_repos: [Example.Repo],
+  resource_path: Path.expand("../priv/resources", __DIR__)
 
 # Configures the endpoint
 config :example, ExampleWeb.Endpoint,

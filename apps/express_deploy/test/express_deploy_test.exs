@@ -9,7 +9,7 @@ defmodule ExpressDeployTest do
         %{
           foo: "bar",
           fizz: "buzz",
-          credential_file: "credential_file.json",
+          credential_file: "#{@path}/credential_file.json",
           resource_directory: "#{@path}/resource_dir",
           temp_directory: "#{@path}/temp_dir"
         }
@@ -18,7 +18,7 @@ defmodule ExpressDeployTest do
 
       assert contents =~ "fizz: buzz"
       assert contents =~ "foo: bar"
-      assert contents =~ "credential_file: #{@path}/resource_dir/credential_file.json"
+      assert contents =~ "credential_file: #{@path}/credential_file.json"
     end
   end
 end
