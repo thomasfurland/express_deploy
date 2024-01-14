@@ -1,0 +1,13 @@
+---
+plugin: gcp_compute
+projects:
+  - <%= @project %>
+auth_kind: serviceaccount
+service_account_file: <%= @credential_file %>
+keyed_groups:
+  - key: labels
+    prefix: label
+  - key: zone
+    prefix: zone
+groups:
+  remote: "'vegapunk' in (labels|list)"
